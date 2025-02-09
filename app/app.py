@@ -11,6 +11,8 @@ import json
 
 MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/personnel_data")
 AUTH_TOKEN = os.environ.get("AUTH_TOKEN", "")
+
+client = MongoClient(MONGO_URI)
 db = client.get_default_database()
 collection = db["daily_snapshots"]
 
