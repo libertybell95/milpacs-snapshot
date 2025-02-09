@@ -1,0 +1,20 @@
+name: Milpacs Snapshot Service
+services:
+  mongodb:
+    image: mongo:6.0
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+      
+  snapshot-app:
+    build: ./app
+    container_name: snapshot-app
+    depends_on:
+      - mongodb
+    environment:
+      - MONGO_URI=mongodb://mongodb:27017/personnel_data
+      - AUTH_TOKEN=GPb49CgKNgv3avnRTkOIsozQTfvTqem8MRCLKFmYKKKpcI0b1r
+volumes:
+  mongo-data:
