@@ -1,18 +1,21 @@
+version: '3.8'
 name: Milpacs Snapshot Service
 services:
-  mongodb:
-    image: mongo:6.0
-    container_name: mongodb
-    volumes:
-      - mongo-data:/data/db
-
-  snapshot-app:
-    build: ./app
-    container_name: snapshot-app
-    depends_on:
-      - mongodb
+  mongo:
+    image: mongo:latest
+    container_name: mongo
     environment:
-      - MONGO_URI=mongodb://mongodb:27017/personnel_data
-      - AUTH_TOKEN=GPb49CgKNgv3avnRTkOIsozQTfvTqem8MRCLKFmYKKKpcI0b1r
+      MONGO_INITDB_DATABASE: personnel_data
+    volumes:
+      - ./init-mongo.js:/docker-entrypoint-initdb.d/init-mongo.js
+
+  app:
+    build: .
+    container_name: snapshot-app
+    environment:
+      MONGO_URI: mongodb://mongo:27017/personnel_data
+      AUTH_TOKEN: GPb49CgKNgv3avnRTkOIsozQTfvTqem8MRCLKFmYKKKpcI0b1r
+    depends_on:
+      - mongo
 volumes:
   mongo-data:
